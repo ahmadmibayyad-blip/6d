@@ -8,12 +8,16 @@
   <meta property="og:title" content="6D Pro Hair Extension DK">
   <meta property="og:description" content="Naturlige 6D hair extensions i Aarhus og København. Kurser og B2B-salg.">
   <meta property="og:locale" content="da_DK">
+  <meta property="og:image" content="https://d8j0ntlcm91z4.cloudfront.net/user_3ErdqHHl71fVqO0WCWm1LJdWUTa/hf_20260927_162447_8e5e7e51-4d83-4473-a21d-a685f0e323fa.png">
+  <meta name="theme-color" content="#f8f3ee">
+  <link rel="preload" as="image" href="https://d8j0ntlcm91z4.cloudfront.net/user_3ErdqHHl71fVqO0WCWm1LJdWUTa/hf_20260927_162447_8e5e7e51-4d83-4473-a21d-a685f0e323fa.png" fetchpriority="high">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+  <a href="#main" class="skip-link">Spring til indhold</a>
 
   <!-- ========== HEADER ========== -->
   <header class="header" id="top">
@@ -41,7 +45,7 @@
     </div>
   </header>
 
-  <main>
+  <main id="main">
     <!-- ========== HERO ========== -->
     <section class="hero">
       <div class="hero__media" style="--img: url('https://d8j0ntlcm91z4.cloudfront.net/user_3ErdqHHl71fVqO0WCWm1LJdWUTa/hf_20260927_162447_8e5e7e51-4d83-4473-a21d-a685f0e323fa.png')"></div>
@@ -62,10 +66,10 @@
     <!-- ========== USP BAR ========== -->
     <section class="usp" aria-label="Fordele">
       <div class="container usp__grid">
-        <div class="usp__item"><span class="usp__icon">✦</span><p><strong>100% ægte hår</strong>Premium remy-kvalitet</p></div>
-        <div class="usp__item"><span class="usp__icon">✦</span><p><strong>Ingen varme eller lim</strong>Skånsomt mod dit eget hår</p></div>
-        <div class="usp__item"><span class="usp__icon">✦</span><p><strong>Hurtig påsætning</strong>Op til 3× hurtigere</p></div>
-        <div class="usp__item"><span class="usp__icon">✦</span><p><strong>Genbrugeligt hår</strong>Kan flyttes op flere gange</p></div>
+        <div class="usp__item"><span class="usp__icon" aria-hidden="true">✦</span><p><strong>100% ægte hår</strong>Premium remy-kvalitet</p></div>
+        <div class="usp__item"><span class="usp__icon" aria-hidden="true">✦</span><p><strong>Ingen varme eller lim</strong>Skånsomt mod dit eget hår</p></div>
+        <div class="usp__item"><span class="usp__icon" aria-hidden="true">✦</span><p><strong>Hurtig påsætning</strong>Op til 3× hurtigere</p></div>
+        <div class="usp__item"><span class="usp__icon" aria-hidden="true">✦</span><p><strong>Genbrugeligt hår</strong>Kan flyttes op flere gange</p></div>
       </div>
     </section>
 
@@ -205,6 +209,7 @@
           </div>
         </div>
         <div class="center">
+          <button type="button" class="btn btn--ghost" id="video-toggle">Pause videoer</button>
           <a class="btn btn--light" href="https://www.instagram.com/6d_pro__hair_extensiondk/" target="_blank" rel="noopener">
             Følg @6d_pro__hair_extensiondk
           </a>
@@ -362,7 +367,7 @@
             <label>Navn<input type="text" name="navn" required autocomplete="name"></label>
             <label>Telefon<input type="tel" name="telefon" autocomplete="tel"></label>
           </div>
-          <label>E-mail<input type="email" name="email" required autocomplete="email"></label>
+          <label>E-mail<input type="email" name="email" required autocomplete="email" spellcheck="false"></label>
           <div class="form__row">
             <label>Jeg er interesseret i
               <select name="emne">
@@ -381,8 +386,8 @@
               </select>
             </label>
           </div>
-          <label>Besked<textarea name="besked" rows="4" placeholder="Fortæl kort om dine ønsker – fx længde, farve og fylde"></textarea></label>
-          <button type="submit" class="btn btn--light btn--block">Send forespørgsel</button>
+          <label>Besked<textarea name="besked" rows="4" placeholder="Fortæl kort om dine ønsker – fx længde, farve og fylde…"></textarea></label>
+          <button type="submit" class="btn btn--light btn--block" id="form-submit">Send via Instagram</button>
           <p class="form__status" id="form-status" role="status" aria-live="polite"></p>
         </form>
       </div>
