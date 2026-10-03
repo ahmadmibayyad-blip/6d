@@ -20,23 +20,6 @@ const onScroll = () => header.classList.toggle("is-scrolled", window.scrollY > 1
 window.addEventListener("scroll", onScroll, { passive: true });
 onScroll();
 
-// Reveal on scroll
-const revealTargets = document.querySelectorAll(
-  ".section__head, .split__media, .split__text, .card, .step, .results figure, .product, .b2b__item, .faq details, .contact > *"
-);
-if ("IntersectionObserver" in window) {
-  const io = new IntersectionObserver(
-    (entries) => entries.forEach((e) => {
-      if (e.isIntersecting) {
-        e.target.classList.add("is-visible");
-        io.unobserve(e.target);
-      }
-    }),
-    { threshold: 0.12 }
-  );
-  revealTargets.forEach((el) => { el.classList.add("reveal"); io.observe(el); });
-}
-
 // Play result videos only while visible, unless the visitor paused them
 const videos = document.querySelectorAll(".results video");
 const videoToggle = document.getElementById("video-toggle");
