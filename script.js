@@ -37,36 +37,77 @@ if ("IntersectionObserver" in window) {
   revealTargets.forEach((el) => { el.classList.add("reveal"); io.observe(el); });
 }
 
-// Play result videos only while visible
+// Play result videos only while visible, unless the visitor paused them
 const videos = document.querySelectorAll(".results video");
+const videoToggle = document.getElementById("video-toggle");
 const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 if ("IntersectionObserver" in window && !reduceMotion) {
+  const visible = new Set();
+  let paused = false;
   const vio = new IntersectionObserver(
     (entries) => entries.forEach((e) => {
-      if (e.isIntersecting) e.target.play().catch(() => {});
-      else e.target.pause();
+      if (e.isIntersecting) {
+        visible.add(e.target);
+        if (!paused) e.target.play().catch(() => {});
+      } else {
+        visible.delete(e.target);
+        e.target.pause();
+      }
     }),
     { threshold: 0.4 }
   );
   videos.forEach((v) => vio.observe(v));
+  videoToggle.addEventListener("click", () => {
+    paused = !paused;
+    videoToggle.textContent = paused ? "Afspil videoer" : "Pause videoer";
+    visible.forEach((v) => (paused ? v.pause() : v.play().catch(() => {})));
+  });
 } else {
   videos.forEach((v) => { v.controls = true; });
+  videoToggle.hidden = true;
 }
 
 // Contact form
 const form = document.getElementById("contact-form");
 const status = document.getElementById("form-status");
+if (CONTACT_EMAIL) document.getElementById("form-submit").textContent = "Send via e-mail";
 
-form.addEventListener("submit", async (e) => {
+const fieldErrors = {
+  navn: "Skriv dit navn.",
+  email: "Skriv en gyldig e-mail, fx navn@mail.dk.",
+};
+
+// Shows (or clears) the error under a field, inside its label.
+function setFieldError(field, message) {
+  let el = field.parentElement.querySelector(".form__error");
+  field.classList.toggle("is-invalid", Boolean(message));
+  if (!message) {
+    el?.remove();
+    field.removeAttribute("aria-invalid");
+    return;
+  }
+  if (!el) {
+    el = document.createElement("span");
+    el.className = "form__error";
+    field.after(el);
+  }
+  el.textContent = message;
+  field.setAttribute("aria-invalid", "true");
+}
+
+form.addEventListener("input", (e) => {
+  if (e.target.classList.contains("is-invalid") && e.target.checkValidity()) setFieldError(e.target, "");
+});
+
+form.addEventListener("submit", (e) => {
   e.preventDefault();
-  let valid = true;
+  const invalid = [...form.querySelectorAll("[required]")].filter((field) => !field.checkValidity());
   form.querySelectorAll("[required]").forEach((field) => {
-    const ok = field.checkValidity();
-    field.classList.toggle("is-invalid", !ok);
-    if (!ok) valid = false;
+    setFieldError(field, invalid.includes(field) ? fieldErrors[field.name] : "");
   });
-  if (!valid) {
-    status.textContent = "Udfyld venligst navn og en gyldig e-mail.";
+  if (invalid.length) {
+    status.textContent = "Ret de markerede felter.";
+    invalid[0].focus();
     return;
   }
 
@@ -85,13 +126,14 @@ form.addEventListener("submit", async (e) => {
     return;
   }
 
-  try {
-    await navigator.clipboard.writeText(message);
-    status.textContent = "Tak! Din besked er kopieret – indsæt den i vores Instagram-chat, som åbner nu.";
-  } catch {
-    status.textContent = "Tak! Skriv til os i Instagram-chatten, som åbner nu.";
-  }
+  // Start the copy and open the chat right away, inside the click: browsers
+  // (Safari especially) block a window opened after waiting on the clipboard.
+  const copied = navigator.clipboard ? navigator.clipboard.writeText(message) : Promise.reject();
   window.open(`https://ig.me/m/${INSTAGRAM_USER}`, "_blank", "noopener");
+  copied.then(
+    () => { status.textContent = "Tak! Din besked er kopieret – indsæt den i vores Instagram-chat, som åbner nu."; },
+    () => { status.textContent = "Tak! Skriv til os i Instagram-chatten, som åbner nu."; }
+  );
 });
 
 document.getElementById("year").textContent = new Date().getFullYear();
