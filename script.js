@@ -2,6 +2,24 @@
 const CONTACT_EMAIL = "";
 const INSTAGRAM_USER = "6d_pro__hair_extensiondk";
 
+document.documentElement.classList.add("js");
+
+// Reveal the tall arch photos as they scroll into view (once)
+const reveals = document.querySelectorAll(".split__img");
+if ("IntersectionObserver" in window) {
+  const rio = new IntersectionObserver(
+    (entries) => entries.forEach((e) => {
+      if (!e.isIntersecting) return;
+      e.target.classList.add("is-in");
+      rio.unobserve(e.target);
+    }),
+    { rootMargin: "0px 0px -100px 0px" }
+  );
+  reveals.forEach((img) => rio.observe(img));
+} else {
+  reveals.forEach((img) => img.classList.add("is-in"));
+}
+
 // Mobile menu
 const burger = document.getElementById("burger");
 const nav = document.getElementById("nav");
